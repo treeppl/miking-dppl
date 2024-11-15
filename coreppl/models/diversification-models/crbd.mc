@@ -56,4 +56,3 @@ let crbd: Tree -> Float -> Float = lam tree. lam rho.
   walk root.left root.age;
   walk root.right root.age;
   lambda
-

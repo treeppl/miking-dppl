@@ -65,6 +65,22 @@ test-coreppl: build/${CPPL_NAME}
 test-coreppl-compiler:
 	@$(MAKE) -s -f test-coreppl.mk compiler
 
+.PHONY: test-coreppl-coin-iter-alter
+test-coreppl-coin-iter-alter:
+	@$(MAKE) -s -f test-coreppl.mk coin-iter-alter
+
+.PHONY: test-coreppl-gamma-poisson
+test-coreppl-gamma-poisson:
+	@$(MAKE) -s -f test-coreppl.mk gamma-poisson
+
+.PHONY: test-coreppl-crbd
+test-coreppl-crbd:
+	@$(MAKE) -s -f test-coreppl.mk crbd
+
+.PHONY: test-infer-files
+test-infer-files:
+	@$(MAKE) -s -f test-coreppl.mk infer-files
+
 #############
 ## RootPPL ##
 #############

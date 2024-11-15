@@ -14,6 +14,9 @@ test-files := $(filter-out coreppl/src/transformation.mc,$(test-files))
 test-files := $(filter-out coreppl/src/cppl.mc,$(test-files))
 
 test-infer-files=$(shell find coreppl/test/coreppl-to-mexpr/infer -name "*.mc")
+test-coin-iter-alter=$(shell find coreppl/test/coreppl-to-mexpr/cli -name "coin-iter-alter.mc")
+test-gamma-poisson=$(shell find coreppl/test/coreppl-to-mexpr/cli -name "gamma-poisson.mc")
+test-crbd=$(shell find coreppl/test/coreppl-to-mexpr/infer -name "crbd.mc")
 test-staticdelay-files=$(shell find coreppl/test/coreppl-to-mexpr/static-delay -name "*.mc")
 test-cli-files=\
   $(shell find coreppl/test/coreppl-to-mexpr/cli \
@@ -43,6 +46,18 @@ cppl: ${test-staticdelay-files} ${test-infer-files} ${test-cli-files}
 .PHONY: static-delay
 static-delay: ${test-staticdelay-files}
 
+.PHONY: coin-iter-alter
+coin-iter-alter: ${test-coin-iter-alter}
+
+.PHONY: gamma-poisson
+gamma-poisson: ${test-gamma-poisson}
+
+.PHONY: crbd
+crbd: ${test-crbd}
+
+.PHONY: infer-files
+infer-files: ${test-infer-files} 
+
 export CPPL_NAME
 export MIDPPL_PATH=${CURDIR}
 export MIDPPL_SRC=${MIDPPL_PATH}/${CPPL_SRC}
@@ -61,3 +76,5 @@ ${test-cli-files}::
 # Static delay tests
 ${test-staticdelay-files}::
 	@./make test $@
+
+# Infer unit tests coin-iter-alter
