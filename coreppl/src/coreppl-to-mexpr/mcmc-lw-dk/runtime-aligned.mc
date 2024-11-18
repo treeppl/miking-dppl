@@ -86,26 +86,35 @@ let newSample: all a. use RuntimeDistBase in Dist a -> (Any,Float) = lam dist.
   (unsafeCoerce s, w)
 
 let choseKernel: all a. use RuntimeDistBase in Dist a -> a -> Float -> Dist a = 
-lam dist. lam prev. lam drift. 
-  use RuntimeDistElementary in
+  lam dist. lam prev. lam drift. 
+    use RuntimeDistElementary in
 
-  let prev: Float = (unsafeCoerce prev) in
+    let prev: Float = (unsafeCoerce prev) in
 
-  let kernel = match dist with DistUniform x then
-    DistUniform {a = (subf prev drift), b = (addf prev drift)} else 
-      (match dist with DistGamma x then 
-        DistGaussian {mu = prev, sigma = drift} else 
-          (match dist with DistBeta x then
-            DistUniform {a = (subf prev drift), b = (addf prev drift)} else
-              (match dist with DistBinomial x then
-                let n = ceilfi (divf (mulf prev prev) (subf prev drift)) in
-                DistBinomial {n = n, p = divf prev (int2float n)} 
-              else DistGaussian {mu = prev, sigma = drift}
+    let kernel = match dist with DistUniform x then
+      DistUniform {a = (subf prev drift), b = (addf prev drift)} else 
+        (match dist with DistBernoulli x then 
+          DistBernoulli {p = subf 1.0 prev} else
+            (match dist with DistBinomial x then
+              let n = ceilfi (divf (mulf prev prev) (subf prev drift)) in
+              DistBinomial {n = n, p = divf prev (int2float n)} else
+                (match dist with DistGaussian x then 
+                  DistGaussian {mu = prev, sigma = drift} else 
+                    (match dist with DistPoisson x then 
+                      let n = ceilfi (divf (mulf prev prev) (subf prev drift)) in
+                      DistBinomial {n = n, p = divf prev (int2float n)} else
+                        (match dist with DistBeta x then
+                          DistUniform {a = (subf prev drift), b = (addf prev drift)} else
+                            (match dist with DistGamma x then
+                              DistUniform {a = (divf prev drift), b = (mulf prev drift)} else dist
+                            )
+                        )
+                    )
                 )
             )
         )
-    in
-    kernel
+      in
+  kernel
 
 -- Drift Kernel Function
 -- - we have access here to the driftScale parameter compileOptions.driftScale
@@ -120,6 +129,7 @@ let moveSample: all a. use RuntimeDistBase in Dist a -> (Any, Float) =
   let drift = compileOptions.driftScale in
 
   let kernelPrev = choseKernel dist (unsafeCoerce prev) drift in
+
   let prop = sample kernelPrev in
 
   let priorProp = logObserve dist (unsafeCoerce prop) in
