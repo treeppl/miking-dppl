@@ -99,29 +99,32 @@ let choseKernel: all a. use RuntimeDistBase in Dist a -> a -> Float -> Dist a =
   
     let prev: Float = (unsafeCoerce prev) in
 
-    let kernel = match dist with DistUniform x then
+    let kernel = match dist with DistUniform x then 
       DistUniform {a = (subf prev drift), b = (addf prev drift)} else 
-        (match dist with DistBernoulli x then 
+        (match dist with DistBernoulli x then
           DistBernoulli {p = subf 1.0 prev} else
             (match dist with DistBinomial x then
               let n = ceilfi (divf (mulf prev prev) (subf prev drift)) in
               DistBinomial {n = n, p = divf prev (int2float n)} else
-                (match dist with DistGaussian x then 
+                (match dist with DistGaussian x then
                   DistGaussian {mu = prev, sigma = drift} else 
-                    (match dist with DistPoisson x then 
+                    (match dist with DistPoisson x then
                       let n = ceilfi (divf (mulf prev prev) (subf prev drift)) in
                       DistBinomial {n = n, p = divf prev (int2float n)} else
                         (match dist with DistBeta x then
-                          DistUniform {a = (subf prev drift), b = (addf prev drift)} else
+                          DistUniform {a = (mulf drift prev), b = (mulf drift (subf 1. prev))} else
                             (match dist with DistGamma x then
-                              DistUniform {a = (divf prev drift), b = (mulf prev drift)} else dist
+                              DistUniform {a = (divf prev drift), b = (mulf prev drift)} else
+                                (match dist with DistExponential x then
+                                  DistUniform {a = (divf prev drift), b = (mulf prev drift)} else dist
+                                )
                             )
                         )
                     )
                 )
             )
         )
-      in
+    in
   kernel
   
 -- Drift Kernel Function

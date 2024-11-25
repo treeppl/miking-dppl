@@ -110,8 +110,8 @@ let res = [
   t 500 "-m mcmc-lightweight --align --cps partial",
   t 500 "-m mcmc-lightweight --align --cps full",
   t 500 "-m mcmc-lightweight",
-  t 500 "-m mcmc-lw-dk --align --cps none --kernel --drift 5. --mcmc-lw-gprob 0.0",
-  t 500 "-m mcmc-lw-dk --align --cps partial --kernel --drift 5. --mcmc-lw-gprob 0.0"
+  t 500 "-m mcmc-lw-dk --align --cps none --kernel --drift 0.87 --mcmc-lw-gprob 0.0",
+  t 500 "-m mcmc-lw-dk --align --cps partial --kernel --drift 0.86 --mcmc-lw-gprob 0.0"
 ] in
 
 recursive

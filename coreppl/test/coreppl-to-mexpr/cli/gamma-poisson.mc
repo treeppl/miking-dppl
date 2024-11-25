@@ -104,7 +104,7 @@ mexpr
 
 let s = 10e-3 in
 let eq = eqCoin s in
-let t = testCpplMExpr "gamma-poisson.mc" 20000 in
+let t = testCpplMExpr "gamma-poisson.mc" 40000 in
 let res = [
   t 0   "-m is-lw --cps none",
   t 0   "-m is-lw --cps partial",
@@ -131,8 +131,8 @@ let res = [
   t 500 "-m mcmc-lightweight --align --cps partial",
   t 500 "-m mcmc-lightweight --align --cps full",
   t 500 "-m mcmc-lightweight",
-  t 500 "-m mcmc-lw-dk --align --cps none --kernel --drift 2.0 --mcmc-lw-gprob 0.0",
-  t 500 "-m mcmc-lw-dk --align --cps partial --kernel --drift 2.0 --mcmc-lw-gprob 0.0"
+  t 500 "-m mcmc-lw-dk --align --cps none --kernel --drift 0.35 --mcmc-lw-gprob 0.0",
+  t 500 "-m mcmc-lw-dk --align --cps partial --kernel --drift 0.35 --mcmc-lw-gprob 0.0"
 ] in
 
 recursive
